@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Finance Manager</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    input, button {
+      margin: 5px 0;
+      padding: 8px;
+      width: 300px;
+    }
+    .result {
+      margin-top: 15px;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+  </style>
+</head>
+<body>
+  <!-- 
+    Intelligent Personal Finance Manager for Students
+    --------------------------------------------------
+    Why is this tool important?
+    - Many students struggle to track expenses manually.
+    - It automates expense categorization, saving time.
+    - Predicts overspending before it happens, so students can plan.
+    - Monitors progress toward financial goals and provides instant alerts.
+    
+    How is it useful?
+    - Promotes good money habits by raising financial awareness.
+    - Helps avoid debt by setting a clear spending goal.
+    - Motivates students with encouraging messages when they are under budget.
+    - Provides a simple, interactive web-based solution accessible from any browser.
+  -->
+
+  <h2>Intelligent Personal Finance Manager for Students</h2>
+
+  <!-- Expense description input + categorization -->
+  <label>Expense Description:</label><br>
+  <input type="text" id="expenseDesc" placeholder="e.g., Paid for Uber ride"><br>
+  <button onclick="categorizeExpense()">Categorize Expense</button>
+  <div class="result" id="categoryOutput"></div>
+
+  <hr>
+
+  <!-- Spending prediction feature -->
+  <label>Current Month Spending (₹):</label><br>
+  <input type="number" id="currentSpending" value="4500"><br>
+  <button onclick="predictSpending()">Predict Next Month Spending</button>
+  <div class="result" id="predictionOutput"></div>
+
+  <hr>
+
+  <!-- Goal setting + monitoring progress -->
+  <label>Set Goal (₹):</label><br>
+  <input type="number" id="goalAmount" value="5000"><br>
+  <button onclick="setGoalAndMonitor()">Check Goal Progress</button>
+  <div class="result" id="goalOutput"></div>
+
+  <script>
+    // Keywords used to categorize expenses automatically.
+    // This helps students know where their money is going.
+    const keywords = {
+      "Food": ["meal", "lunch", "dinner", "groceries", "restaurant"],
+      "Transport": ["bus", "train", "taxi", "uber", "metro"],
+      "Entertainment": ["movie", "concert", "game", "netflix"],
+      "Utilities": ["electricity", "water", "internet", "phone"],
+      "Education": ["book", "tuition", "course", "exam"],
+      "Shopping": ["clothes", "shoes", "store", "mall"]
+    };
+
+    // Categorize the entered expense based on keywords
+    // Benefit: Saves time and builds awareness of daily spending.
+    function categorizeExpense() {
+      const desc = document.getElementById("expenseDesc").value.toLowerCase();
+      let category = "Other";
+      for (let cat in keywords) {
+        for (let word of keywords[cat]) {
+          if (desc.includes(word)) {
+            category = cat;
+            break;
+          }
+        }
+      }
+      document.getElementById("categoryOutput").innerText =
+        "Expense Categorized as: " + category;
+    }
+
+    // Predict future spending by applying a random fluctuation
+    // Benefit: Gives students an idea of what next month looks like,
+    // helping them prepare financially in advance.
+    function predictSpending() {
+      const current = parseFloat(document.getElementById("currentSpending").value);
+      const fluctuation = (Math.random() * 0.3 - 0.1); // -10% to +20%
+      const predicted = (current * (1 + fluctuation)).toFixed(2);
+      document.getElementById("predictionOutput").innerText =
+        "Predicted Spending Next Month: ₹" + predicted;
+    }
+
+    // Check spending against a set financial goal
+    // Benefit: Sends alerts if overspending, otherwise encourages saving.
+    function setGoalAndMonitor() {
+      const current = parseFloat(document.getElementById("currentSpending").value);
+      const goal = parseFloat(document.getElementById("goalAmount").value);
+      let message = "";
+      if (current > goal) {
+        message = "Alert: Over your goal by ₹" + (current - goal) + "!";
+      } else {
+        message = "Good job! ₹" + (goal - current) + " left to reach your goal.";
+      }
+      document.getElementById("goalOutput").innerText = message;
+    }
+  </script>
+</body>
+</html>
